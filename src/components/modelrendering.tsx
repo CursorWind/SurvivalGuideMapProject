@@ -4,13 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { Sky } from 'three/examples/jsm/Addons.js';
 import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js';
-let initialized = false; // Flag to track initialization
 const Three1 = () => {
   useEffect(() => {
 
-    
-    if (!initialized) {
-      initialized = true;
     // Set up scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -18,19 +14,14 @@ const Three1 = () => {
     renderer.shadowMap.enabled = true;
     const controls = new OrbitControls( camera, renderer.domElement );
     renderer.setSize(window.innerWidth, window.innerHeight);
-    document.getElementById('scene-container').appendChild(renderer.domElement);
 
     //below code reused from threejs examples documentation
-    let sky, sun;
+    let sky = new Sky(), sun = new THREE.Vector3();
     function initSky() {
-
       // Add Sky
-      sky = new Sky();
-      sky.scale.setScalar( 450000 );
-      scene.add( sky );
-
-      sun = new THREE.Vector3();
-
+      sky.scale.setScalar(450000);
+      scene.add(sky);
+    
       /// GUI
       const effectController = {
         turbidity: 9.81,
@@ -38,44 +29,41 @@ const Three1 = () => {
         mieCoefficient: 0.026,
         mieDirectionalG: 0.7,
         elevation: 7,
-        azimuth: -11,
+        azimuth: -177,
         exposure: renderer.toneMappingExposure
       };
-
-      function guiChanged() {
-
+    
+      const guiChanged = function() {
         const uniforms = sky.material.uniforms;
-        uniforms[ 'turbidity' ].value = effectController.turbidity;
-        uniforms[ 'rayleigh' ].value = effectController.rayleigh;
-        uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
-        uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
-
-        const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
-        const theta = THREE.MathUtils.degToRad( effectController.azimuth );
-
-        sun.setFromSphericalCoords( 1, phi, theta );
-
-        uniforms[ 'sunPosition' ].value.copy( sun );
-
+        uniforms['turbidity'].value = effectController.turbidity;
+        uniforms['rayleigh'].value = effectController.rayleigh;
+        uniforms['mieCoefficient'].value = effectController.mieCoefficient;
+        uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
+    
+        const phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
+        const theta = THREE.MathUtils.degToRad(effectController.azimuth);
+    
+        sun.setFromSphericalCoords(1, phi, theta);
+    
+        uniforms['sunPosition'].value.copy(sun);
+    
         renderer.toneMappingExposure = effectController.exposure;
-        renderer.render( scene, camera );
-
-      }
-
+        renderer.render(scene, camera);
+      };
+    
       const gui = new GUI();
-
-      gui.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
-      gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
-      gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
-      gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
-      gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
-      gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
-      gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
-
-      gui.hide()
+    
+      gui.add(effectController, 'turbidity', 0.0, 20.0, 0.1).onChange(guiChanged);
+      gui.add(effectController, 'rayleigh', 0.0, 4, 0.001).onChange(guiChanged);
+      gui.add(effectController, 'mieCoefficient', 0.0, 0.1, 0.001).onChange(guiChanged);
+      gui.add(effectController, 'mieDirectionalG', 0.0, 1, 0.001).onChange(guiChanged);
+      gui.add(effectController, 'elevation', 0, 90, 0.1).onChange(guiChanged);
+      gui.add(effectController, 'azimuth', -180, 180, 0.1).onChange(guiChanged);
+      gui.add(effectController, 'exposure', 0, 1, 0.0001).onChange(guiChanged);
+    
+      gui.hide();
       guiChanged();
-
-    }
+    }    
 
     function init() {
       camera.position.set( 0, 100, 2000 );
@@ -113,10 +101,8 @@ const Three1 = () => {
     loader.load('/models/SKFULLV.glb', (gltf) => {
       const model = gltf.scene;
       model.traverse((node) => {
-        if (node.isMesh) {
-          node.castShadow = true; // Enable casting shadows for model meshes
-          node.receiveShadow = true; // Enable receiving shadows for model meshes
-        }
+        node.castShadow = true; // Enable casting shadows for model meshes
+        node.receiveShadow = true; // Enable receiving shadows for model meshes
       });
       scene.add(model);
     }, undefined, (error) => {
@@ -140,9 +126,9 @@ const Three1 = () => {
     scene.add(directionalLight);
     
     // Set camera position
-    camera.position.z = 125;
-    camera.position.y = 125;
-    camera.position.x = 250;
+    camera.position.z = 275;
+    camera.position.y = 143;
+    camera.position.x = -12.3;
 
     
     // Animation
@@ -169,10 +155,9 @@ const Three1 = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }
   }, []); // Empty dependency array ensures useEffect runs once after initial render
 
-  return <div id="scene-container" className='absolute top-0 left-0' />;
+  return <div id='scene-container'></div>;
 };
 
 export default Three1;
