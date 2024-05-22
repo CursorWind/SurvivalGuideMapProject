@@ -7,6 +7,8 @@ import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js';
 
 var distanceX: number, distanceY: number, distanceZ: number;
 const midpoint = new THREE.Vector3();
+let on = 0;
+export const guides:THREE.Mesh[]=[];
 
 const Three1 = () => {
   useEffect(() => {
@@ -135,26 +137,27 @@ const Three1 = () => {
     camera.position.x = -12.3;
 
     //Pointer for the rooms
-    const PointerGeometry=new THREE.BoxGeometry(1,1,1)
     const TransparentPointerMaterial = new THREE.MeshBasicMaterial({
       color: 0xff4f00,    
       transparent: true,
       opacity: 0.5,
     });
-    const pointerMesh = new THREE.Mesh(PointerGeometry,TransparentPointerMaterial);
-    scene.add(pointerMesh);
-
     
+   
     
     // Animation
     const animate = () => {
       requestAnimationFrame(animate);
-
-      pointerMesh.scale.x = distanceX;
-      pointerMesh.scale.y = distanceY;
-      pointerMesh.scale.z = distanceZ;
-      pointerMesh.position.set(midpoint.x, midpoint.y, midpoint.z);
-
+      
+      if (on===1){
+        const ng = new THREE.BoxGeometry(distanceX,distanceY,distanceZ)
+        const guide = new THREE.Mesh(ng,TransparentPointerMaterial)
+        guide.position.set(midpoint.x, midpoint.y, midpoint.z);
+        scene.add(guide)
+        guides.push(guide)
+        on=0;
+      }
+      
       controls.update();
       renderer.render(scene, camera);
     };
@@ -185,7 +188,7 @@ export function pointerDisplay(pos1:THREE.Vector3,pos2:THREE.Vector3){
   midpoint.x = (pos1.x + pos2.x) / 2;
   midpoint.y = (pos1.y + pos2.y) / 2;
   midpoint.z = (pos1.z + pos2.z) / 2;
-
+  on = 1;
 }
 
 export default Three1;
