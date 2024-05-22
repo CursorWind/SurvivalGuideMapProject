@@ -1,9 +1,13 @@
-import { useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { Sky } from 'three/examples/jsm/Addons.js';
 import GUI from 'three/examples/jsm/libs/lil-gui.module.min.js';
+
+var distanceX: number, distanceY: number, distanceZ: number;
+const midpoint = new THREE.Vector3();
+
 const Three1 = () => {
   useEffect(() => {
 
@@ -130,11 +134,26 @@ const Three1 = () => {
     camera.position.y = 143;
     camera.position.x = -12.3;
 
+    //Pointer for the rooms
+    const PointerGeometry=new THREE.BoxGeometry(1,1,1)
+    const TransparentPointerMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff4f00,    
+      transparent: true,
+      opacity: 0.5,
+    });
+    const pointerMesh = new THREE.Mesh(PointerGeometry,TransparentPointerMaterial);
+    scene.add(pointerMesh);
+
+    
     
     // Animation
     const animate = () => {
       requestAnimationFrame(animate);
 
+      pointerMesh.scale.x = distanceX;
+      pointerMesh.scale.y = distanceY;
+      pointerMesh.scale.z = distanceZ;
+      pointerMesh.position.set(midpoint.x, midpoint.y, midpoint.z);
 
       controls.update();
       renderer.render(scene, camera);
@@ -159,5 +178,14 @@ const Three1 = () => {
 
   return <div id='scene-container'></div>;
 };
+export function pointerDisplay(pos1:THREE.Vector3,pos2:THREE.Vector3){
+  distanceX = Math.abs(pos1.x - pos2.x);
+  distanceY = Math.abs(pos1.y - pos2.y);
+  distanceZ = Math.abs(pos1.z - pos2.z);
+  midpoint.x = (pos1.x + pos2.x) / 2;
+  midpoint.y = (pos1.y + pos2.y) / 2;
+  midpoint.z = (pos1.z + pos2.z) / 2;
+
+}
 
 export default Three1;
