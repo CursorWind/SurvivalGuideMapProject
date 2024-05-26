@@ -2,6 +2,16 @@ import { pointerDisplay, guides } from '../components/modelrendering';
 import React, { useState, useEffect } from 'react';
 import * as THREE from 'three';
 import path from 'path'; // Path manipulation - not used now that its been outdated.
+import { isNull } from 'util';
+import {
+  Checkbox,
+  FormGroup,
+  FormItem,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+} from "@suankularb-components/react";
 
 interface Position {
   title: string;
@@ -40,8 +50,11 @@ const SearchBar = () => {
     const filteredResults = positions.filter((position) =>
       position.title.toLowerCase().includes(searchText.toLowerCase())
     );
-    guides.splice(0, guides.length); //removes exisitng guides
+    for (let i = 0; i < guides.length; i++){
+      guides[i].removeFromParent
+    }
 
+    
     for (let i = 0; i < filteredResults.length; i++){
       let result = filteredResults[i];
       const v1 = result.pos1;
@@ -70,7 +83,9 @@ const SearchBar = () => {
         placeholder="Search positions..."
         value={searchText}
         onChange={handleChange}
+        className="text-gray-600 w-1/2 placeholder-gray-600"        
       />
+
       <button onClick={handleClick}>Search</button>
       {searchResults.length > 0 && (
         <ul>

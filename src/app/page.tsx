@@ -8,9 +8,9 @@ const ThreeGlobe = dynamic(() => import('../components/modelrendering'), { ssr: 
 
 const Home = () => {
   return (
-    <><ThreeGlobe/> 
+    <div className='bg-white w-full h-full'><ThreeGlobe/> 
     <SearchComponent/>
-    </>
+    </div>
   );
 };
 
