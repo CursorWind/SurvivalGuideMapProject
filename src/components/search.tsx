@@ -65,26 +65,25 @@ const SearchBar = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search positions..."
-        value={searchText}
-        onChange={handleChange}
-        className="text-gray-600 w-1/2 placeholder-gray-600"        
-      />
-
-      <button onClick={handleClick}>Search</button>
+    <div className='fixed right-3 bottom-4'>
       {searchResults.length > 0 && (
         <ul>
           {searchResults.map((result) => (
             <li key={result.title}>
-              {/* Access other attributes here */}
               {result.title}
             </li>
           ))}
         </ul>
-      )}
+      )}<input
+        type="text"
+        placeholder="Search positions..."
+        value={searchText}
+        onChange={handleChange}
+        className="text-white placeholder-slate-200 w-48 rounded-md fill-none border-white border-2 bg-transparent"        
+      />
+
+      <button className="ml-1" onClick={handleClick}>Search</button>
+      
     </div>
   );
 };
