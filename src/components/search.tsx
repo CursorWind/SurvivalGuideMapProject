@@ -1,17 +1,6 @@
 import { pointerDisplay, guides } from '../components/modelrendering';
 import React, { useState, useEffect } from 'react';
 import * as THREE from 'three';
-import path from 'path'; // Path manipulation - not used now that its been outdated.
-import { isNull } from 'util';
-import {
-  Checkbox,
-  FormGroup,
-  FormItem,
-  MenuItem,
-  Select,
-  Switch,
-  TextField,
-} from "@suankularb-components/react";
 
 interface Position {
   title: string;
