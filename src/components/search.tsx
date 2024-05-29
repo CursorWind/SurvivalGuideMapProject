@@ -34,7 +34,6 @@ const SearchBar = () => {
     setSearchText(event.target.value);
   };
 
-  console.log(positions)
   const handleClick = () => {
     const filteredResults = positions.filter((position) =>
       position.title.toLowerCase().includes(searchText.toLowerCase())
