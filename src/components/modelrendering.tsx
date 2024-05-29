@@ -143,8 +143,13 @@ const Three1 = () => {
       opacity: 0.5,
     });
     
-   
+    //Sky pointer
+    const geometry = new THREE.ConeGeometry( 10, 20, 4 );    
+    const pyramid = new THREE.Mesh( geometry, TransparentPointerMaterial );
+    pyramid.rotation.x = Math.PI;
     
+    scene.add( pyramid );
+    pyramid.position.y = -2000;
     // Animation
     const animate = () => {
       requestAnimationFrame(animate);
@@ -155,6 +160,7 @@ const Three1 = () => {
         guide.position.set(midpoint.x, midpoint.y, midpoint.z);
         scene.add(guide)
         guides.push(guide)
+        pyramid.position.set(midpoint.x, 90, midpoint.z)
         on=0;
       }
       
@@ -163,11 +169,8 @@ const Three1 = () => {
     };
 
     animate();
-    function pD(pos1:THREE.Vector3, pos2:THREE.Vector3){
 
-    }
-
-    // Handle resize
+    // Handle resize - just in case
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
