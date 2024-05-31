@@ -84,7 +84,7 @@ const Three1 = () => {
       renderer.toneMappingExposure = 0.5;
       document.body.appendChild( renderer.domElement );
 
-      controls.enableZoom = false;
+      controls.enableZoom = true;
       controls.enablePan = false;
 
       initSky();
@@ -132,9 +132,9 @@ const Three1 = () => {
     scene.add(directionalLight);
     
     // Set camera position
-    camera.position.z = 275;
+    camera.position.z = 143*2;
     camera.position.y = 143;
-    camera.position.x = -12.3;
+    camera.position.x = -14.3;
 
     //Pointer for the rooms
     const TransparentPointerMaterial = new THREE.MeshBasicMaterial({
