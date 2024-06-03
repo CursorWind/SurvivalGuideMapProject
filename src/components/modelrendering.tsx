@@ -12,6 +12,10 @@ export const guides:THREE.Mesh[]=[];
 const Three1 = () => {
   useEffect(() => {
 
+    const brandingElement = document.getElementById('branding');
+      if (brandingElement) {
+        brandingElement.style.opacity = '1';
+      }
     // Set up scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -26,8 +30,7 @@ const Three1 = () => {
       // Add Sky
       sky.scale.setScalar(450000);
       scene.add(sky);
-    
-      /// GUI
+
       const effectController = {
         turbidity: 9.81,
         rayleigh: 2.181,
@@ -38,8 +41,24 @@ const Three1 = () => {
         exposure: renderer.toneMappingExposure
       };
     
-      renderer.toneMappingExposure = effectController.exposure;
-      renderer.render(scene, camera);
+      const skyconfig = function() {
+        const uniforms = sky.material.uniforms;
+        uniforms['turbidity'].value = effectController.turbidity;
+        uniforms['rayleigh'].value = effectController.rayleigh;
+        uniforms['mieCoefficient'].value = effectController.mieCoefficient;
+        uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
+    
+        const phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
+        const theta = THREE.MathUtils.degToRad(effectController.azimuth);
+    
+        sun.setFromSphericalCoords(1, phi, theta);
+    
+        uniforms['sunPosition'].value.copy(sun);
+    
+        renderer.toneMappingExposure = effectController.exposure;
+        renderer.render(scene, camera);
+      };
+      skyconfig();
     }    
 
     function init() {
@@ -82,6 +101,9 @@ const Three1 = () => {
         node.castShadow = true; // Enable casting shadows for model meshes
         node.receiveShadow = true; // Enable receiving shadows for model meshes
       });
+      if (brandingElement) {
+        brandingElement.style.opacity = '0';
+    }
       
     }, undefined, (error) => {
       console.error('An error happened', error);
