@@ -79,7 +79,7 @@ const SearchBar = () => {
         placeholder="Search positions..."
         value={searchText}
         onChange={handleChange}
-        className="text-white placeholder-slate-200 w-48 rounded-md fill-none border-white border-2 bg-transparent"        
+        className="text-white p-1 placeholder-slate-200 w-48 rounded-md fill-none border-white border-2 bg-transparent"        
       />
 
       <button className="ml-1" onClick={handleClick}>Search</button>
