@@ -5,9 +5,9 @@ import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { Sky } from 'three/examples/jsm/Addons.js';
 
 var distanceX: number, distanceY: number, distanceZ: number;
-const midpoint = new THREE.Vector3();
 let on = 0;
 export const guides:THREE.Mesh[]=[];
+export const scene = new THREE.Scene();
 
 const Three1 = () => {
   useEffect(() => {
@@ -17,7 +17,6 @@ const Three1 = () => {
         brandingElement.style.opacity = '1';
       }
     // Set up scene
-    const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ logarithmicDepthBuffer: true, alpha:true });
     renderer.shadowMap.enabled = true;
@@ -129,37 +128,35 @@ const Three1 = () => {
     camera.position.z = 143*2;
     camera.position.y = 143;
     camera.position.x = -14.3;
+    
+    
 
-    //Pointer for the rooms
-    const TransparentPointerMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff4f00,    
-      transparent: true,
-      opacity: 0.5,
-    });
-    
-    //Sky pointer
-    const geometry = new THREE.ConeGeometry( 10, 20, 4 );    
-    const pyramid = new THREE.Mesh( geometry, TransparentPointerMaterial );
-    pyramid.rotation.x = Math.PI;
-    
-    scene.add( pyramid );
-    pyramid.position.y = -2000;
+    // Target position
+const targetPosition = new THREE.Vector3(0,0,0);
+
+// Initial position (can be the current camera position)
+const initialPosition = new THREE.Vector3().copy(camera.position);
+
+// Look-at position (optional, if you want to move the look-at point too)
+const initialLookAt = new THREE.Vector3(0, 0, 0);
+const targetLookAt = new THREE.Vector3(3, 5, 6);
+
+// Duration of the transition in seconds
+const transitionDuration = 2.0;
+
+// Clock to keep track of time
+const clock = new THREE.Clock();
+let elapsedTime = 0;
+let transitioning = true;
+
+
     // Animation
     const animate = () => {
       requestAnimationFrame(animate);
       
-      if (on===1){
-        const ng = new THREE.BoxGeometry(distanceX,distanceY,distanceZ)
-        const guide = new THREE.Mesh(ng,TransparentPointerMaterial)
-        guide.position.set(midpoint.x, midpoint.y, midpoint.z);
-        scene.add(guide)
-        guides.push(guide)
-        pyramid.position.set(midpoint.x, 90, midpoint.z)
-        on=0;
-      }
-      
       controls.update();
       renderer.render(scene, camera);
+
     };
 
     animate();
@@ -181,14 +178,5 @@ const Three1 = () => {
 
   return <div id='scene-container'></div>;
 };
-export function pointerDisplay(pos1:THREE.Vector3,pos2:THREE.Vector3){
-  distanceX = Math.abs(pos1.x - pos2.x);
-  distanceY = Math.abs(pos1.y - pos2.y);
-  distanceZ = Math.abs(pos1.z - pos2.z);
-  midpoint.x = (pos1.x + pos2.x) / 2;
-  midpoint.y = (pos1.y + pos2.y) / 2;
-  midpoint.z = (pos1.z + pos2.z) / 2;
-  on = 1;
-}
 
 export default Three1;
