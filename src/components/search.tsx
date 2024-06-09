@@ -94,10 +94,6 @@ const SearchBar = () => {
     setSearchResults(enhancedResults);
   };
 
-  const handleClick = () => {
-    // console.log(guideArray)
-  };
-
   return (
     <div className='fixed right-3 bottom-4'>
       {searchResults.length > 0 && (
@@ -115,7 +111,6 @@ const SearchBar = () => {
         onChange={handleChange}
         className="text-white p-1 placeholder-slate-200 w-48 rounded-md fill-none border-white border-2 bg-transparent"        
       />
-      <button className="ml-1" onClick={handleClick}>Search</button>
       
     </div>
   );
