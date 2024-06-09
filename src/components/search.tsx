@@ -36,16 +36,13 @@ const SearchBar = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
-  };
 
-  const handleClick = () => {
-    // console.log(guideArray)
     for (let i = 0; i < guideArray.length; i++){
       scene.remove(guideArray[i])
     }
 
     const filteredResults = positions.filter((position) =>
-      position.title.toLowerCase().includes(searchText.toLowerCase())
+      position.title.toLowerCase().includes(event.target.value.toLowerCase())
     );
     
     const TransparentPointerMaterial = new THREE.MeshBasicMaterial({
@@ -95,6 +92,10 @@ const SearchBar = () => {
     });
 
     setSearchResults(enhancedResults);
+  };
+
+  const handleClick = () => {
+    // console.log(guideArray)
   };
 
   return (
