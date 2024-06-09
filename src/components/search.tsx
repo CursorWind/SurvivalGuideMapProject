@@ -16,10 +16,14 @@ interface Position {
   };
 }
 
+let guideArray: THREE.Mesh[] = []
+
 const SearchBar = () => {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState<Position[]>([]);
   const [positions, setPositions] = useState<Position[]>([]);
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +39,11 @@ const SearchBar = () => {
   };
 
   const handleClick = () => {
+    // console.log(guideArray)
+    for (let i = 0; i < guideArray.length; i++){
+      scene.remove(guideArray[i])
+    }
+
     const filteredResults = positions.filter((position) =>
       position.title.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -65,15 +74,15 @@ const SearchBar = () => {
     pyramid.rotation.x = Math.PI;
     
     scene.add( pyramid );
-    pyramid.position.y = -2000;
-
+    
       const ng = new THREE.BoxGeometry(distanceX,distanceY,distanceZ)
       const guide = new THREE.Mesh(ng,TransparentPointerMaterial)
       guide.position.set(midpoint.x, midpoint.y, midpoint.z);
       scene.add(guide)
       pyramid.position.set(midpoint.x, 90, midpoint.z)
 
-      
+      guideArray.push(guide);
+      guideArray.push(pyramid);
     }
     const enhancedResults = filteredResults.map((result) => {
       if (result.pos1) { // Check if pos1 exists before accessing it
