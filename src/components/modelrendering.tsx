@@ -94,8 +94,10 @@ const Three1 = () => {
     //loading code copied from documentation
     const loader = new GLTFLoader();
     loader.load('/models/SKFULLV.glb', (gltf) => {
+      animate();
       const model = gltf.scene;
       scene.add(model);
+      
       model.traverse((node) => {
         node.castShadow = true; // Enable casting shadows for model meshes
         node.receiveShadow = true; // Enable receiving shadows for model meshes
@@ -104,7 +106,9 @@ const Three1 = () => {
         brandingElement.style.opacity = '0';
     }
       
-    }, undefined, (error) => {
+    }, (xhr) => {
+      console.log((xhr.loaded / 84787432) * 100 + '% loaded');
+    }, (error) => {
       console.error('An error happened', error);
     });
 
@@ -128,26 +132,6 @@ const Three1 = () => {
     camera.position.z = 143*2;
     camera.position.y = 143;
     camera.position.x = -14.3;
-    
-    
-
-    // Target position
-const targetPosition = new THREE.Vector3(0,0,0);
-
-// Initial position (can be the current camera position)
-const initialPosition = new THREE.Vector3().copy(camera.position);
-
-// Look-at position (optional, if you want to move the look-at point too)
-const initialLookAt = new THREE.Vector3(0, 0, 0);
-const targetLookAt = new THREE.Vector3(3, 5, 6);
-
-// Duration of the transition in seconds
-const transitionDuration = 2.0;
-
-// Clock to keep track of time
-const clock = new THREE.Clock();
-let elapsedTime = 0;
-let transitioning = true;
 
 
     // Animation
@@ -159,7 +143,7 @@ let transitioning = true;
 
     };
 
-    animate();
+    
 
     // Handle resize - just in case
     const handleResize = () => {
