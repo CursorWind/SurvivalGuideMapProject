@@ -4,8 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/Addons.js';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { Sky } from 'three/examples/jsm/Addons.js';
 
-var distanceX: number, distanceY: number, distanceZ: number;
-let on = 0;
 export const guides:THREE.Mesh[]=[];
 export const scene = new THREE.Scene();
 
@@ -107,7 +105,7 @@ const Three1 = () => {
     }
       
     }, (xhr) => {
-      console.log((xhr.loaded / 84787432) * 100 + '% loaded');
+      //console.log((xhr.loaded / 84787432) * 100 + '% loaded');
     }, (error) => {
       console.error('An error happened', error);
     });
